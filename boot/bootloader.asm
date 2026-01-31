@@ -2,7 +2,7 @@
 [bits 16]
 
 start:
-    mov [BOOT_DRIVE], dl   ; ✅ save boot drive
+    mov [BOOT_DRIVE], dl   ; save boot drive
 
     cli
     xor ax, ax
@@ -27,7 +27,7 @@ load_kernel:
     mov ch, 0
     mov cl, 2
     mov dh, 0
-    mov dl, [BOOT_DRIVE]   ; ✅ correct drive
+    mov dl, [BOOT_DRIVE]   ; correct drive
     mov bx, 0x1000
     int 0x13
 
