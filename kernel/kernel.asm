@@ -137,11 +137,21 @@ strcmp:
     ret
 
 clear_screen:
+    ; Clear entire screen
     mov ax, 0x0600
     mov bh, 0x07
     mov cx, 0x0000
     mov dx, 0x184F
     int 0x10
+    
+    ; Move cursor to top-left (0, 0) 
+    ; -> coz we're cute right?
+    mov ah, 0x02
+    mov bh, 0x00
+    mov dh, 0x00
+    mov dl, 0x00
+    int 0x10
+
     ret
 
 ; ==========================
