@@ -31,11 +31,28 @@ read_line:
     cmp al, 13        ; Enter?
     je .done
 
+    cmp al, 8         ; Backspace
+    je .backspace
+
     mov [di], al
     inc di
 
     mov ah, 0x0E
     int 0x10          ; echo char
+    jmp .read
+
+.backspace:
+    cmp di, buffer
+    je .read
+
+    dec di
+    mov ah, 0x0E
+    mov al, 8
+    int 0x10
+    mov al, ' '
+    int 0x10
+    mov al, 8
+    int 0x10
     jmp .read
 
 .done:
