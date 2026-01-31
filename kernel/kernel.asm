@@ -2,6 +2,7 @@
 [bits 16]
 
 start:
+    call clear_screen
     call print_welcome
 
 main_loop:
@@ -15,8 +16,15 @@ main_loop:
 ; Printing
 ; ==========================
 print_welcome:
-    mov si, welcome
+    mov si, welcome_msg1
     call print_string
+    call newline
+    mov si, welcome_msg2
+    call print_string
+    call newline
+    mov si, welcome_msg3
+    call print_string
+    call newline
     call newline
     ret
 
@@ -108,21 +116,39 @@ handle_command:
     cmp ax, 0
     je .help
 
+    mov si, buffer 
+    mov di, cmd_version
+    call strcmp
+    cmp ax, 0
+    je .version
+
     mov si, buffer
     mov di, cmd_clear
     call strcmp
     cmp ax, 0
     je .clear
 
-    ; default message (cute me hehe)
-    mov si, cute_msg
+    ; default message
+    mov si, notfound_msg
     call print_string
     call newline
     ret
 
 
 .help:
-    mov si, help_msg
+    mov si, help_msg1
+    call print_string
+    call newline
+    mov si, help_msg2
+    call print_string
+    call newline
+    mov si, help_msg3
+    call print_string
+    call newline
+    ret
+
+.version:
+    mov si, version_msg
     call print_string
     call newline
     ret
@@ -172,13 +198,20 @@ clear_screen:
 ; ==========================
 ; Data
 ; ==========================
-welcome db "Welcome to MeowOS", 0
-prompt  db "ralphmaron@meow~$ ", 0
+welcome_msg1 db "Welcome to MeowOS", 0
+welcome_msg2 db "Developed by: Ralph Maron Eda", 0
+welcome_msg3 db "Type 'help' to show commands.", 0
+prompt  db "[ralphmaron@meow]-$ ", 0
 
 cmd_help db "help", 0
 cmd_clear db "clear", 0
+cmd_version db "version", 0
 
-help_msg db "Commands: help clear", 0
-cute_msg db "ralphmaron is cute", 0
+help_msg1 db "help    - Show available commands", 0
+help_msg2 db "clear   - Clear the screen", 0
+help_msg3 db "version - Print version", 0
+
+version_msg db "MeowOS v0.1", 0
+notfound_msg db "Cutiee", 0
 
 buffer  times 128 db 0
