@@ -1,6 +1,5 @@
 # Build artifacts
 /build/*
-!/build/hi.txt
 *.bin
 *.o
 *.img
