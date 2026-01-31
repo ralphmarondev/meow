@@ -5,9 +5,12 @@ build/bootloader.bin: boot/bootloader.asm
 	nasm -f bin boot/bootloader.asm -o build/bootloader.bin
 
 # Compile kernel
-build/kernel.bin: kernel/kernel.c
-	gcc -m32 -ffreestanding -c kernel/kernel.c -o build/kernel.o
-	gcc -m32 -Ttext 0x1000 -ffreestanding -O2 -nostdlib build/kernel.o -o build/kernel.bin
+# build/kernel.bin: kernel/kernel.c
+# 	gcc -m32 -ffreestanding -c kernel/kernel.c -o build/kernel.o
+# 	gcc -m32 -Ttext 0x1000 -ffreestanding -O2 -nostdlib build/kernel.o -o build/kernel.bin
+
+build/kernel.bin: kernel/kernel.asm
+	nasm -f bin kernel/kernel.asm -o build/kernel.bin
 
 # Create bootable disk image
 build/meow.img: build/bootloader.bin build/kernel.bin
