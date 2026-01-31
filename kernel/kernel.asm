@@ -21,8 +21,19 @@ print_welcome:
     ret
 
 print_prompt:
+    push ax
     mov si, prompt
-    call print_string
+.print_prompt_loop:
+    lodsb
+    cmp al, 0
+    je .done_prompt
+    mov ah, 0x0E
+    mov bh, 0x00
+    mov bl, 0x0B    ; cyan
+    int 0x10
+    jmp .print_prompt_loop
+.done_prompt:
+    pop ax
     ret
 
 print_string:
@@ -31,6 +42,8 @@ print_string:
     cmp al, 0
     je .end
     mov ah, 0x0E
+    mov bh, 0x00
+    mov bl, 0x0E    ; yellow
     int 0x10
     jmp .next
 .end:
@@ -62,7 +75,9 @@ read_line:
     inc di
 
     mov ah, 0x0E
-    int 0x10          ; echo char
+    mov bh, 0x00
+    mov bl, 0x0A
+    int 0x10
     jmp .read
 
 .backspace:
@@ -158,7 +173,7 @@ clear_screen:
 ; Data
 ; ==========================
 welcome db "Welcome to MeowOS", 0
-prompt  db "meowOS~$ ", 0
+prompt  db "ralphmaron@meow~$ ", 0
 
 cmd_help db "help", 0
 cmd_clear db "clear", 0
